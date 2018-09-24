@@ -1,0 +1,14 @@
+*.orig
+include/sts/tree/Info.h
+include/sts/tree/Export.h
+output
+test_package/build
+reports
+build
+doc-generated
+vcs_data
+test.bat
+doc.bat
+set-conan-user.bat
+msvc-2017/
+bintray-upload.bat
