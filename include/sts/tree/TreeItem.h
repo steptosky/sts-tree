@@ -47,15 +47,15 @@ namespace tree {
      *  When tree item is being destroyed it destroys all its children and remove itself from its parent.
      * 
      * \tparam TYPE your type.
-     * \tparam CONTAINER container type.
      */
-    template<typename TYPE, typename CONTAINER = std::vector<TYPE*>>
+    template<typename TYPE>
     class TreeItem {
     public:
 
+        typedef std::vector<TYPE*> Container;
         typedef std::size_t Index;    /*!< \details Tree item index. */
         const Index npos = Index(-1); /*!< \details Means no position. */
-        typedef CONTAINER Children;
+        typedef Container Children;
 
         //---------------------------------------------------------------
         /// @{ 
