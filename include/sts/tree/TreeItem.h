@@ -96,9 +96,13 @@ namespace tree {
         //---------------------------------------------------------------
         /// @{
 
-        Index childrenCount() const;
+        TYPE * operator[](Index index);
+        const TYPE * operator[](Index index) const;
+
         TYPE * childAt(Index index);
         const TYPE * childAt(Index index) const;
+
+        Index childrenCount() const;
         const Children & children() const;
         virtual TYPE * takeChildAt(Index index);
 

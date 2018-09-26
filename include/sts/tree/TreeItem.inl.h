@@ -145,12 +145,14 @@ namespace tree {
     /**************************************************************************************************/
 
     /*!
-     * \details Gets the item children's count.
-     * \return Children's count.
+     * \details Gets the child by its index.
+     * \param [in] index
+     * \return Pointer to the child.
      */
     template<typename TYPE, typename CONTAINER>
-    size_t TreeItem<TYPE, CONTAINER>::childrenCount() const {
-        return mChildren.size();
+    TYPE * TreeItem<TYPE, CONTAINER>::operator[](const Index index) {
+        assert(index < mChildren.size());
+        return mChildren[index];
     }
 
     /*!
@@ -159,9 +161,23 @@ namespace tree {
      * \return Pointer to the child.
      */
     template<typename TYPE, typename CONTAINER>
-    TYPE * TreeItem<TYPE, CONTAINER>::childAt(const Index index) {
+    const TYPE * TreeItem<TYPE, CONTAINER>::operator[](const Index index) const {
         assert(index < mChildren.size());
         return mChildren[index];
+    }
+
+    /**************************************************************************************************/
+    ///////////////////////////////////////////* Functions *////////////////////////////////////////////
+    /**************************************************************************************************/
+
+    /*!
+     * \details Gets the child by its index.
+     * \param [in] index
+     * \return Pointer to the child.
+     */
+    template<typename TYPE, typename CONTAINER>
+    TYPE * TreeItem<TYPE, CONTAINER>::childAt(const Index index) {
+        return (*this)[index];
     }
 
     /*!
@@ -171,8 +187,20 @@ namespace tree {
      */
     template<typename TYPE, typename CONTAINER>
     const TYPE * TreeItem<TYPE, CONTAINER>::childAt(const Index index) const {
-        assert(index < mChildren.size());
-        return mChildren[index];
+        return (*this)[index];
+    }
+
+    /**************************************************************************************************/
+    ///////////////////////////////////////////* Functions *////////////////////////////////////////////
+    /**************************************************************************************************/
+
+    /*!
+     * \details Gets the item children's count.
+     * \return Children's count.
+     */
+    template<typename TYPE, typename CONTAINER>
+    size_t TreeItem<TYPE, CONTAINER>::childrenCount() const {
+        return mChildren.size();
     }
 
     /*!
