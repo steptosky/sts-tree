@@ -267,18 +267,18 @@ namespace tree {
     /*!
      * \details Inserts child by index.
      * \remark The Tree item takes ownership of the specified pointer.
-     * \param [in] where index where new child must be inserted.
+     * \param [in] position where new child must be inserted.
      * \param [in, out] inOutItem tree item that will be inserted as a child.
      * \return Pointer to the item which is the input parameter.
      */
     template<typename TYPE>
-    TYPE * TreeItem<TYPE>::insertChild(const Index where, TYPE * inOutItem) {
+    TYPE * TreeItem<TYPE>::insertChild(typename Children::iterator position, TYPE * inOutItem) {
         assert(inOutItem);
-        assert(where <= mChildren.size());
+        assert(position != mChildren.end());
         assert(inOutItem->parent() != this);
         inOutItem->removeParent();
         inOutItem->mParent = static_cast<TYPE*>(this);
-        mChildren.insert(mChildren.begin() + where, inOutItem);
+        mChildren.insert(position, inOutItem);
         return inOutItem;
     }
 

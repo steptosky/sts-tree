@@ -114,7 +114,7 @@ namespace tree {
         //---------------------------------------------------------------
         /// @{
 
-        virtual TYPE * insertChild(Index where, TYPE * inOutItem);
+        virtual TYPE * insertChild(typename Children::iterator position, TYPE * inOutItem);
         virtual TYPE * appendChild(TYPE * inOutItem);
 
         /// @}

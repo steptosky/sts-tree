@@ -220,8 +220,8 @@ TEST(TestTreeItem, insert) {
     std::unique_ptr<TestTreeItem> treeRoot = std::make_unique<TestTreeItem>();
     auto tree0 = treeRoot->appendChild(new TestTreeItem);
     auto tree1 = treeRoot->appendChild(new TestTreeItem);
-    auto tree2 = treeRoot->insertChild(1, new TestTreeItem);
-    auto tree3 = treeRoot->insertChild(2, new TestTreeItem);
+    auto tree2 = treeRoot->insertChild(treeRoot->begin() + 1, new TestTreeItem);
+    auto tree3 = treeRoot->insertChild(treeRoot->begin() + 2, new TestTreeItem);
     auto tree4 = treeRoot->appendChild(new TestTreeItem);
     //---------------------------------
     ASSERT_EQ(5, treeRoot->childrenNum());
