@@ -252,12 +252,7 @@ namespace tree {
      */
     template<typename TYPE>
     TYPE * TreeItem<TYPE>::prependChild(TYPE * inOutItem) {
-        assert(inOutItem);
-        assert(inOutItem->parent() != this);
-        inOutItem->removeParent();
-        inOutItem->mParent = static_cast<TYPE*>(this);
-        mChildren.insert(mChildren.begin(), inOutItem);
-        return inOutItem;
+        return insertChild(0, inOutItem);
     }
 
     /*!
