@@ -156,7 +156,6 @@ namespace tree {
         Children mChildren;
 
         void removeFromContainer(Children * inOutContainer, const TreeItem * item);
-        void cloneContainer(const Children * container);
         void removeParent();
 
     };

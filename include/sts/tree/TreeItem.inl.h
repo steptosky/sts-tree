@@ -441,18 +441,6 @@ namespace tree {
     }
 
     /*!
-     * \details Clones new children from specified list
-     * \param [in] container
-     */
-    template<typename TYPE, typename CONTAINER>
-    void TreeItem<TYPE, CONTAINER>::cloneContainer(const Children * container) {
-        assert(container);
-        for (auto & item : *container) {
-            appendChild(item->clone());
-        }
-    }
-
-    /*!
      * \details Finds and removes certain child from container without destruction.
      * \param [in, out] inOutContainer
      * \param [in] item
