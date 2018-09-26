@@ -190,10 +190,6 @@ namespace tree {
         return (*this)[index];
     }
 
-    /**************************************************************************************************/
-    ///////////////////////////////////////////* Functions *////////////////////////////////////////////
-    /**************************************************************************************************/
-
     /*!
      * \details Gets the item children's count.
      * \return Children's count.
@@ -201,6 +197,23 @@ namespace tree {
     template<typename TYPE>
     size_t TreeItem<TYPE>::childrenNum() const {
         return mChildren.size();
+    }
+
+    /*!
+     * \details Searches an item index by its pointer.
+     * \param [in] item pointer to tree item whose index must be found.
+     * \return Index if specified pointer that was found otherwise \link TreeItem::npos \endlink.
+     */
+    template<typename TYPE>
+    size_t TreeItem<TYPE>::indexOf(const TYPE * item) const {
+        Index outIndex = 0;
+        for (auto child : mChildren) {
+            if (child == item) {
+                return outIndex;
+            }
+            ++outIndex;
+        }
+        return npos;
     }
 
     /**************************************************************************************************/
@@ -381,23 +394,6 @@ namespace tree {
     template<typename TYPE>
     bool TreeItem<TYPE>::hasChildren() const {
         return !mChildren.empty();
-    }
-
-    /*!
-     * \details Searches an item index by its pointer.
-     * \param [in] item pointer to tree item whose index must be found.
-     * \return Index if specified pointer that was found otherwise \link TreeItem::npos \endlink.
-     */
-    template<typename TYPE>
-    size_t TreeItem<TYPE>::indexOf(const TYPE * item) const {
-        Index outIndex = 0;
-        for (auto child : mChildren) {
-            if (child == item) {
-                return outIndex;
-            }
-            ++outIndex;
-        }
-        return npos;
     }
 
     /**************************************************************************************************/

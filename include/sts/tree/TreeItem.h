@@ -92,6 +92,8 @@ namespace tree {
 
         Index childrenNum() const;
 
+        Index indexOf(const TYPE * item) const;
+
         /// @}
         //---------------------------------------------------------------
         /// @{
@@ -131,7 +133,6 @@ namespace tree {
         /// @{
 
         bool hasChildren() const;
-        Index indexOf(const TYPE * item) const;
 
         /// @}
         //---------------------------------------------------------------
