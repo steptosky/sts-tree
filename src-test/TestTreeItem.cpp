@@ -28,6 +28,7 @@
 */
 
 #include <memory>
+#include <algorithm>
 #include "gtest/gtest.h"
 #include "sts/tree/TreeItem.h"
 
@@ -491,6 +492,67 @@ TEST(TestTreeItem, re_parenting) {
     treeRoot.reset();
     ASSERT_EQ(0, TestTreeItem::instances);
     //---------------------------------
+}
+
+/**************************************************************************************************/
+//////////////////////////////////////////* Functions */////////////////////////////////////////////
+/**************************************************************************************************/
+
+TEST(TestTreeItem, iteration_farward) {
+    std::unique_ptr<TestTreeItem> treeRoot = std::make_unique<TestTreeItem>();
+    const auto tree0 = treeRoot->appendChild(new TestTreeItem);
+    const auto tree1 = treeRoot->appendChild(new TestTreeItem);
+    const auto tree2 = treeRoot->appendChild(new TestTreeItem);
+    TestTreeItem::Children check;
+    //---------------------------------
+    for (auto child : *treeRoot) {
+        ASSERT_TRUE(child->parent() == treeRoot.get());
+        check.emplace_back(child);
+    }
+    //---------------------------------
+    ASSERT_EQ(3, check.size());
+    EXPECT_TRUE(tree0 == check[0]);
+    EXPECT_TRUE(tree1 == check[1]);
+    EXPECT_TRUE(tree2 == check[2]);
+}
+
+TEST(TestTreeItem, iteration_reverse) {
+    std::unique_ptr<TestTreeItem> treeRoot = std::make_unique<TestTreeItem>();
+    const auto tree0 = treeRoot->appendChild(new TestTreeItem);
+    const auto tree1 = treeRoot->appendChild(new TestTreeItem);
+    const auto tree2 = treeRoot->appendChild(new TestTreeItem);
+    TestTreeItem::Children check;
+    //---------------------------------
+    for (auto child = treeRoot->rbegin(); child != treeRoot->rend(); ++child) {
+        ASSERT_TRUE((*child)->parent() == treeRoot.get());
+        check.emplace_back(*child);
+    }
+    //---------------------------------
+    ASSERT_EQ(3, check.size());
+    EXPECT_TRUE(tree2 == check[0]);
+    EXPECT_TRUE(tree1 == check[1]);
+    EXPECT_TRUE(tree0 == check[2]);
+}
+
+TEST(TestTreeItem, sorting) {
+    std::unique_ptr<TestTreeItem> treeRoot = std::make_unique<TestTreeItem>();
+    const auto tree0 = treeRoot->appendChild(new TestTreeItem(2));
+    const auto tree1 = treeRoot->appendChild(new TestTreeItem(1));
+    const auto tree2 = treeRoot->appendChild(new TestTreeItem(0));
+    //---------------------------------
+    ASSERT_EQ(3, treeRoot->childrenCount());
+    EXPECT_TRUE(tree0 == (*treeRoot)[0]);
+    EXPECT_TRUE(tree1 == (*treeRoot)[1]);
+    EXPECT_TRUE(tree2 == (*treeRoot)[2]);
+    //---------------------------------
+    std::sort(treeRoot->begin(), treeRoot->end(), [](const auto val1, const auto val2) {
+        return val1->mMark < val2->mMark;
+    });
+    //---------------------------------
+    ASSERT_EQ(3, treeRoot->childrenCount());
+    EXPECT_TRUE(tree0 == (*treeRoot)[2]);
+    EXPECT_TRUE(tree1 == (*treeRoot)[1]);
+    EXPECT_TRUE(tree2 == (*treeRoot)[0]);
 }
 
 /**************************************************************************************************/

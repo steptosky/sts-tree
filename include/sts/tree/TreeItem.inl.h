@@ -244,6 +244,50 @@ namespace tree {
     ///////////////////////////////////////////* Functions *////////////////////////////////////////////
     /**************************************************************************************************/
 
+    template<typename TYPE>
+    typename TreeItem<TYPE>::Children::iterator TreeItem<TYPE>::begin() {
+        return mChildren.begin();
+    }
+
+    template<typename TYPE>
+    typename TreeItem<TYPE>::Children::iterator TreeItem<TYPE>::end() {
+        return mChildren.end();
+    }
+
+    template<typename TYPE>
+    typename TreeItem<TYPE>::Children::const_iterator TreeItem<TYPE>::begin() const {
+        return mChildren.begin();
+    }
+
+    template<typename TYPE>
+    typename TreeItem<TYPE>::Children::const_iterator TreeItem<TYPE>::end() const {
+        return mChildren.end();
+    }
+
+    template<typename TYPE>
+    typename TreeItem<TYPE>::Children::reverse_iterator TreeItem<TYPE>::rbegin() {
+        return mChildren.rbegin();
+    }
+
+    template<typename TYPE>
+    typename TreeItem<TYPE>::Children::reverse_iterator TreeItem<TYPE>::rend() {
+        return mChildren.rend();
+    }
+
+    template<typename TYPE>
+    typename TreeItem<TYPE>::Children::const_reverse_iterator TreeItem<TYPE>::rbegin() const {
+        return mChildren.rbegin();
+    }
+
+    template<typename TYPE>
+    typename TreeItem<TYPE>::Children::const_reverse_iterator TreeItem<TYPE>::rend() const {
+        return mChildren.rend();
+    }
+
+    /**************************************************************************************************/
+    ///////////////////////////////////////////* Functions *////////////////////////////////////////////
+    /**************************************************************************************************/
+
     /*!
      * \details Adds a child to the start of the children list.
      * \remark The item takes ownership of the specified pointer.

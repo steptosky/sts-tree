@@ -98,6 +98,22 @@ namespace tree {
         //---------------------------------------------------------------
         /// @{
 
+        typename Children::iterator begin();
+        typename Children::iterator end();
+
+        typename Children::const_iterator begin() const;
+        typename Children::const_iterator end() const;
+
+        typename Children::reverse_iterator rbegin();
+        typename Children::reverse_iterator rend();
+
+        typename Children::const_reverse_iterator rbegin() const;
+        typename Children::const_reverse_iterator rend() const;
+
+        /// @}
+        //---------------------------------------------------------------
+        /// @{
+
         virtual TYPE * prependChild(TYPE * inOutItem);
         virtual TYPE * insertChild(Index where, TYPE * inOutItem);
         virtual TYPE * appendChild(TYPE * inOutItem);
