@@ -243,35 +243,38 @@ function(genInfoFile descriptionFile destinationFile)
     set(CONTENT "${CONTENT}#define ${__prfix__}COMPILER_NAME \"${CMAKE_CXX_COMPILER_ID}\" \n")
     set(CONTENT "${CONTENT}#define ${__prfix__}COMPILER_VERSION \"${CMAKE_CXX_COMPILER_VERSION}\" \n\n")
 
-    if (${ProjectVcsType} STREQUAL git)
-        if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
-            if (NOT vcs_revision)
-                execute_process(
-                        COMMAND "git" "log" "-1" "--pretty=format:%h"
-                        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                        RESULT_VARIABLE vcs_result
-                        OUTPUT_VARIABLE vcs_revision
-                )
-            endif()
-            if (NOT vcs_branch)
-                execute_process(
-                        COMMAND "git" "rev-parse" "--abbrev-ref" "HEAD"
-                        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                        RESULT_VARIABLE vcs_result
-                        OUTPUT_VARIABLE vcs_branch
-                )
-                if(vcs_branch)
-                    string(STRIP ${vcs_branch} vcs_branch)
-                    set(CONTENT "${CONTENT}/* git */\n")
+    if(NOT vcs_revision OR NOT vcs_branch)
+        if (${ProjectVcsType} STREQUAL git)
+            if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
+                if (NOT vcs_revision)
+                    execute_process(
+                            COMMAND "git" "log" "-1" "--pretty=format:%h"
+                            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                            RESULT_VARIABLE vcs_result
+                            OUTPUT_VARIABLE vcs_revision
+                    )
                 endif()
+                if (NOT vcs_branch)
+                    execute_process(
+                            COMMAND "git" "rev-parse" "--abbrev-ref" "HEAD"
+                            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                            RESULT_VARIABLE vcs_result
+                            OUTPUT_VARIABLE vcs_branch
+                    )
+                    if(vcs_branch)
+                        string(STRIP ${vcs_branch} vcs_branch)
+                        set(CONTENT "${CONTENT}/* git */\n")
+                    endif()
+                endif()
+            else()
+                message(WARNING "<${CMAKE_SOURCE_DIR}> isn't a git repository")
             endif()
         else()
-            message(WARNING "<${CMAKE_SOURCE_DIR}> isn't a git repository")
+            message(STATUS "VCS <ProjectVcsType> variable isn't specified")
         endif()
     else()
-        message(STATUS "VCS is not specified")
+        message(STATUS "<vcs_revision> and <vcs_branch> has already been set from outside")
     endif()
-
     #-------------------------------#
     if(NOT vcs_revision)
         if (NOT $ENV{GIT_COMMIT} STREQUAL "")
