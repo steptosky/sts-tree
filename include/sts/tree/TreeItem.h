@@ -91,7 +91,6 @@ namespace tree {
         const TYPE * childAt(Index index) const;
 
         Index childrenCount() const;
-        const Children & children() const;
         virtual TYPE * takeChildAt(Index index);
 
         /// @}
@@ -152,15 +151,14 @@ namespace tree {
 
     protected:
 
-        Children & childrenAccess();
+        Children mChildren;
 
     private:
 
-        TYPE * mParent = nullptr;
-        Children mChildren;
-
         void removeFromContainer(Children * inOutContainer, const TreeItem * item);
         void removeParent();
+
+        TYPE * mParent = nullptr;
 
     };
 

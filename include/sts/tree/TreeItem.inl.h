@@ -220,26 +220,6 @@ namespace tree {
         return child;
     }
 
-    /*!
-     * \details Access to the constant children list.
-     * \return Reference to the children list.
-     */
-    template<typename TYPE>
-    const typename TreeItem<TYPE>::Container & TreeItem<TYPE>::children() const {
-        return mChildren;
-    }
-
-    /*!
-     * \details Access to the children list.
-     * \warning Be careful when you change this data manually.
-     *          You must understand what you do.
-     * \return Reference to the children list.
-     */
-    template<typename TYPE>
-    typename TreeItem<TYPE>::Container & TreeItem<TYPE>::childrenAccess() {
-        return mChildren;
-    }
-
     /**************************************************************************************************/
     ///////////////////////////////////////////* Functions *////////////////////////////////////////////
     /**************************************************************************************************/
