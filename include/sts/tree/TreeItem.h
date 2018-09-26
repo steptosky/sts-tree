@@ -91,7 +91,6 @@ namespace tree {
         const TYPE * childAt(Index index) const;
 
         Index childrenCount() const;
-        virtual TYPE * takeChildAt(Index index);
 
         /// @}
         //---------------------------------------------------------------
@@ -120,7 +119,10 @@ namespace tree {
         //---------------------------------------------------------------
         /// @{
 
-        virtual void deleteChildAt(Index index);
+        virtual TYPE * takeChildAt(Index index);
+        virtual typename Children::iterator eraseChild(typename Children::iterator position);
+        virtual typename Children::iterator deleteChild(typename Children::iterator position);
+        virtual void deleteChild(Index index);
         virtual bool deleteChild(TYPE * inOutItem);
         virtual void deleteChildren();
 

@@ -203,23 +203,6 @@ namespace tree {
         return mChildren.size();
     }
 
-    /*!
-     * \details Takes the child by its index and removes it from the children list.
-     *          The item will not be child's owner anymore, so don't forget to delete it yourself.
-     * \param [in] index child index that must be removed from the children list and returned.
-     * \return Item that is removed from the children list.
-     */
-    template<typename TYPE>
-    TYPE * TreeItem<TYPE>::takeChildAt(const Index index) {
-        assert(index < mChildren.size());
-        auto child = mChildren[index];
-        mChildren.erase(mChildren.begin() + index);
-        // the child mustn't delete them-self from 
-        // its parent as it doesn't make a sense in this case.
-        child->mParent = nullptr;
-        return child;
-    }
-
     /**************************************************************************************************/
     ///////////////////////////////////////////* Functions *////////////////////////////////////////////
     /**************************************************************************************************/
@@ -307,14 +290,70 @@ namespace tree {
     /**************************************************************************************************/
 
     /*!
+     * \details Takes the child by its index and removes it from the children list.
+     *          The item will not be child's owner anymore, so don't forget to delete it yourself.
+     * \param [in] index child index that must be removed from the children list and returned.
+     * \return Item that is removed from the children list.
+     */
+    template<typename TYPE>
+    TYPE * TreeItem<TYPE>::takeChildAt(const Index index) {
+        assert(index < mChildren.size());
+        auto child = mChildren[index];
+        eraseChild(mChildren.begin() + index);
+        return child;
+    }
+
+    /*!
+     * \details Just removes child from hierarchy. It doesn't destroy the item.
+     * \param [in] position
+     */
+    template<typename TYPE>
+    typename TreeItem<TYPE>::Children::iterator TreeItem<TYPE>::eraseChild(const typename Children::iterator position) {
+        assert(position != mChildren.end());
+        (*position)->mParent = nullptr;
+        return mChildren.erase(position);
+    }
+
+    /*!
+     * \details Removes child from item's children list by iterator.
+     *          The child's destructor will be called while removing.
+     * \param [in] position
+     */
+    template<typename TYPE>
+    typename TreeItem<TYPE>::Children::iterator TreeItem<TYPE>::deleteChild(const typename Children::iterator position) {
+        assert(position != mChildren.end());
+        auto item = *position;
+        auto out = eraseChild(position);
+        delete item;
+        return out;
+    }
+
+    /*!
      * \details Removes child from item's children list by child's index. 
      *          The child's destructor will be called while removing.
      * \param [in] index of a child that must be deleted.
      */
     template<typename TYPE>
-    void TreeItem<TYPE>::deleteChildAt(const Index index) {
+    void TreeItem<TYPE>::deleteChild(const Index index) {
         assert(index < mChildren.size());
         delete takeChildAt(index);
+    }
+
+    /*!
+     * \details Removes child from item's children list by child's pointer.
+     *          The child's destructor will be called while removing.
+     * \param [in, out] inOutItem pointer to a children that must be deleted.
+     * \return True if the child by the specified pointer was deleted otherwise false.
+     */
+    template<typename TYPE>
+    bool TreeItem<TYPE>::deleteChild(TYPE * inOutItem) {
+        for (auto iter = begin(); iter != end(); ++iter) {
+            if (*iter == inOutItem) {
+                deleteChild(iter);
+                return true;
+            }
+        }
+        return false;
     }
 
     /*!
@@ -329,22 +368,6 @@ namespace tree {
             delete child;
         }
         mChildren.clear();
-    }
-
-    /*!
-     * \details Removes child from item's children list by child's pointer.
-     *          The child's destructor will be called while removing.
-     * \param [in, out] inOutItem pointer to a children that must be deleted.
-     * \return True if the child by the specified pointer was deleted otherwise false.
-     */
-    template<typename TYPE>
-    bool TreeItem<TYPE>::deleteChild(TYPE * inOutItem) {
-        const auto index = indexOf(inOutItem);
-        if (index == npos) {
-            return false;
-        }
-        deleteChildAt(index);
-        return true;
     }
 
     /**************************************************************************************************/

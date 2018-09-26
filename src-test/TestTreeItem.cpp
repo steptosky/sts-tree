@@ -188,26 +188,6 @@ TEST(TestTreeItem, childAt) {
     ASSERT_EQ(0, TestTreeItem::instances);
 }
 
-TEST(TestTreeItem, takeChildAt) {
-    std::unique_ptr<TestTreeItem> treeRoot = std::make_unique<TestTreeItem>();
-    const auto tree0 = treeRoot->appendChild(new TestTreeItem);
-    treeRoot->appendChild(new TestTreeItem);
-    const auto tree2 = treeRoot->appendChild(new TestTreeItem);
-    ASSERT_EQ(4, TestTreeItem::instances);
-    //---------------------------------
-    ASSERT_EQ(3, treeRoot->childrenCount());
-    auto tree1 = treeRoot->takeChildAt(1);
-    ASSERT_EQ(2, treeRoot->childrenCount());
-    EXPECT_TRUE(tree1->parent() == nullptr);
-    EXPECT_TRUE(treeRoot->childAt(0) == tree0);
-    EXPECT_TRUE(treeRoot->childAt(1) == tree2);
-    EXPECT_TRUE(treeRoot->indexOf(tree1) == treeRoot->npos);
-    treeRoot.reset();
-    EXPECT_EQ(1, TestTreeItem::instances);
-    delete tree1;
-    ASSERT_EQ(0, TestTreeItem::instances);
-}
-
 /**************************************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /**************************************************************************************************/
@@ -264,6 +244,26 @@ TEST(TestTreeItem, insert) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /**************************************************************************************************/
 
+TEST(TestTreeItem, takeChildAt) {
+    std::unique_ptr<TestTreeItem> treeRoot = std::make_unique<TestTreeItem>();
+    const auto tree0 = treeRoot->appendChild(new TestTreeItem);
+    treeRoot->appendChild(new TestTreeItem);
+    const auto tree2 = treeRoot->appendChild(new TestTreeItem);
+    ASSERT_EQ(4, TestTreeItem::instances);
+    //---------------------------------
+    ASSERT_EQ(3, treeRoot->childrenCount());
+    auto tree1 = treeRoot->takeChildAt(1);
+    ASSERT_EQ(2, treeRoot->childrenCount());
+    EXPECT_TRUE(tree1->parent() == nullptr);
+    EXPECT_TRUE(treeRoot->childAt(0) == tree0);
+    EXPECT_TRUE(treeRoot->childAt(1) == tree2);
+    EXPECT_TRUE(treeRoot->indexOf(tree1) == treeRoot->npos);
+    treeRoot.reset();
+    EXPECT_EQ(1, TestTreeItem::instances);
+    delete tree1;
+    ASSERT_EQ(0, TestTreeItem::instances);
+}
+
 TEST(TestTreeItem, deleteChildren) {
     std::unique_ptr<TestTreeItem> treeRoot = std::make_unique<TestTreeItem>();
     treeRoot->appendChild(new TestTreeItem);
@@ -280,14 +280,36 @@ TEST(TestTreeItem, deleteChildren) {
     ASSERT_EQ(0, TestTreeItem::instances);
 }
 
-TEST(TestTreeItem, deleteChildAt) {
+TEST(TestTreeItem, eraseChild_iterator) {
     std::unique_ptr<TestTreeItem> treeRoot = std::make_unique<TestTreeItem>();
     const auto tree0 = treeRoot->appendChild(new TestTreeItem);
     treeRoot->appendChild(new TestTreeItem);
     const auto tree2 = treeRoot->appendChild(new TestTreeItem);
     ASSERT_EQ(3, treeRoot->childrenCount());
+    ASSERT_EQ(4, TestTreeItem::instances);
     //---------------------------------
-    treeRoot->deleteChildAt(1);
+    const auto tree1 = *(treeRoot->begin() + 1);
+    treeRoot->eraseChild(treeRoot->begin() + 1);
+    ASSERT_EQ(2, treeRoot->childrenCount());
+    ASSERT_TRUE(treeRoot->childAt(0) == tree0);
+    ASSERT_TRUE(treeRoot->childAt(1) == tree2);
+    ASSERT_TRUE(tree1->isRoot());
+    ASSERT_EQ(4, TestTreeItem::instances);
+    delete tree1;
+    ASSERT_EQ(3, TestTreeItem::instances);
+    treeRoot.reset();
+    ASSERT_EQ(0, TestTreeItem::instances);
+}
+
+TEST(TestTreeItem, deleteChild_iterator) {
+    std::unique_ptr<TestTreeItem> treeRoot = std::make_unique<TestTreeItem>();
+    const auto tree0 = treeRoot->appendChild(new TestTreeItem);
+    treeRoot->appendChild(new TestTreeItem);
+    const auto tree2 = treeRoot->appendChild(new TestTreeItem);
+    ASSERT_EQ(3, treeRoot->childrenCount());
+    ASSERT_EQ(4, TestTreeItem::instances);
+    //---------------------------------
+    treeRoot->deleteChild(treeRoot->begin() + 1);
     ASSERT_EQ(2, treeRoot->childrenCount());
     ASSERT_TRUE(treeRoot->childAt(0) == tree0);
     ASSERT_TRUE(treeRoot->childAt(1) == tree2);
@@ -296,7 +318,23 @@ TEST(TestTreeItem, deleteChildAt) {
     ASSERT_EQ(0, TestTreeItem::instances);
 }
 
-TEST(TestTreeItem, deleteChild) {
+TEST(TestTreeItem, deleteChild_index) {
+    std::unique_ptr<TestTreeItem> treeRoot = std::make_unique<TestTreeItem>();
+    const auto tree0 = treeRoot->appendChild(new TestTreeItem);
+    treeRoot->appendChild(new TestTreeItem);
+    const auto tree2 = treeRoot->appendChild(new TestTreeItem);
+    ASSERT_EQ(3, treeRoot->childrenCount());
+    //---------------------------------
+    treeRoot->deleteChild(1);
+    ASSERT_EQ(2, treeRoot->childrenCount());
+    ASSERT_TRUE(treeRoot->childAt(0) == tree0);
+    ASSERT_TRUE(treeRoot->childAt(1) == tree2);
+    ASSERT_EQ(3, TestTreeItem::instances);
+    treeRoot.reset();
+    ASSERT_EQ(0, TestTreeItem::instances);
+}
+
+TEST(TestTreeItem, deleteChild_pointer) {
     std::unique_ptr<TestTreeItem> treeRoot = std::make_unique<TestTreeItem>();
     const auto tree0 = treeRoot->appendChild(new TestTreeItem);
     const auto tree1 = treeRoot->appendChild(new TestTreeItem);
