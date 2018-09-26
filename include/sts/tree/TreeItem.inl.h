@@ -252,9 +252,10 @@ namespace tree {
     template<typename TYPE, typename CONTAINER>
     TYPE * TreeItem<TYPE, CONTAINER>::takeChildAt(const Index index) {
         assert(index < mChildren.size());
-        TYPE * t = mChildren.erase(index);
-        t->mParent = nullptr;
-        return t;
+        auto item = mChildren[index];
+        mChildren.erase(index);
+        item->mParent = nullptr;
+        return item;
     }
 
     /*!
@@ -343,9 +344,10 @@ namespace tree {
     template<typename TYPE, typename CONTAINER>
     void TreeItem<TYPE, CONTAINER>::deleteChild(const Index index) {
         assert(index < mChildren.size());
-        TYPE * val = mChildren.erase(index);
-        val->mRemoveFromParent = false;
-        delete val;
+        auto item = mChildren[index];
+        mChildren.erase(index);
+        item->mRemoveFromParent = false;
+        delete item;
     }
 
     /*!
