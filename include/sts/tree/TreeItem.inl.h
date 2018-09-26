@@ -94,9 +94,9 @@ namespace tree {
         if (this != &copy) {
             TreeItem<TYPE, CONTAINER> tmp(copy);
             deleteChildren();
-            for (auto & it : tmp.mChildren) {
-                it->mParent = static_cast<TYPE*>(this);
-                mChildren.push_back(it);
+            for (auto child : tmp.mChildren) {
+                child->mParent = static_cast<TYPE*>(this);
+                mChildren.emplace_back(child);
             }
             tmp.mChildren.clear(); // tmp can't delete clones now
         }
@@ -230,9 +230,12 @@ namespace tree {
     template<typename TYPE, typename CONTAINER>
     TYPE * TreeItem<TYPE, CONTAINER>::takeChildAt(const Index index) {
         assert(index < mChildren.size());
-        TYPE * t = mChildren.erase(index);
-        t->mParent = nullptr;
-        return t;
+        auto child = mChildren[index];
+        mChildren.erase(index);
+        // the child mustn't delete them-self from 
+        // its parent as it doesn't make a sense in this case.
+        child->mParent = nullptr;
+        return child;
     }
 
     /*!
@@ -305,7 +308,7 @@ namespace tree {
         assert(inOutItem->parent() != this);
         inOutItem->removeParent();
         inOutItem->mParent = static_cast<TYPE*>(this);
-        mChildren.push_back(inOutItem);
+        mChildren.emplace_back(inOutItem);
         return inOutItem;
     }
 
@@ -319,13 +322,9 @@ namespace tree {
      * \param [in] index of a child that must be deleted.
      */
     template<typename TYPE, typename CONTAINER>
-    void TreeItem<TYPE, CONTAINER>::deleteChild(const Index index) {
+    void TreeItem<TYPE, CONTAINER>::deleteChildAt(const Index index) {
         assert(index < mChildren.size());
-        TYPE * val = mChildren.erase(index);
-        // the child mustn't delete them-self from 
-        // its parent as it doesn't make a sense in this case.
-        val->mParent = nullptr;
-        delete val;
+        delete takeChildAt(index);
     }
 
     /*!
@@ -333,7 +332,7 @@ namespace tree {
      */
     template<typename TYPE, typename CONTAINER>
     void TreeItem<TYPE, CONTAINER>::deleteChildren() {
-        for (auto & child : mChildren) {
+        for (auto child : mChildren) {
             // the children mustn't delete them-self from 
             // their parent as it doesn't make a sense in this case.
             child->mParent = nullptr;
@@ -350,12 +349,11 @@ namespace tree {
      */
     template<typename TYPE, typename CONTAINER>
     bool TreeItem<TYPE, CONTAINER>::deleteChild(TYPE * inOutItem) {
-        assert(inOutItem);
         const auto index = indexOf(inOutItem);
         if (index == npos) {
             return false;
         }
-        deleteChild(index);
+        deleteChildAt(index);
         return true;
     }
 
@@ -379,11 +377,11 @@ namespace tree {
      */
     template<typename TYPE, typename CONTAINER>
     size_t TreeItem<TYPE, CONTAINER>::indexOf(const TYPE * item) const {
-        assert(item);
         Index outIndex = 0;
-        for (auto & it : mChildren) {
-            if (it == item)
+        for (auto child : mChildren) {
+            if (child == item) {
                 return outIndex;
+            }
             ++outIndex;
         }
         return npos;

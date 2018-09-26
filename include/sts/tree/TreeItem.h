@@ -119,7 +119,7 @@ namespace tree {
         //---------------------------------------------------------------
         /// @{
 
-        virtual void deleteChild(Index index);
+        virtual void deleteChildAt(Index index);
         virtual bool deleteChild(TYPE * inOutItem);
         virtual void deleteChildren();
 

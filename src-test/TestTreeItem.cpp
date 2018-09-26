@@ -362,19 +362,19 @@ TEST(TestTreeItem, deleteChildByChild) {
     ASSERT_EQ(2, tree2->childrenCount());
     ASSERT_EQ(6, TestTreeItem::instanceCreated);
 
-    treeRoot->deleteChild(1);
+    treeRoot->deleteChildAt(1);
     ASSERT_EQ(2, treeRoot->childrenCount());
     ASSERT_EQ(2, tree2->childrenCount());
     ASSERT_EQ(5, TestTreeItem::instanceCreated);
     ASSERT_TRUE(treeRoot->indexOf(tree1) == treeRoot->npos);
 
-    tree2->deleteChild(1);
+    tree2->deleteChildAt(1);
     ASSERT_EQ(2, treeRoot->childrenCount());
     ASSERT_EQ(1, tree2->childrenCount());
     ASSERT_EQ(4, TestTreeItem::instanceCreated);
     ASSERT_TRUE(tree2->indexOf(tree4) == treeRoot->npos);
 
-    treeRoot->deleteChild(1);
+    treeRoot->deleteChildAt(1);
     ASSERT_EQ(1, treeRoot->childrenCount());
     ASSERT_EQ(2, TestTreeItem::instanceCreated);
     ASSERT_TRUE(treeRoot->indexOf(tree2) == treeRoot->npos);
