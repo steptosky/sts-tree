@@ -30,7 +30,7 @@
 */
 
 #include <cstddef>
-#include "TreeItemContainers.h"
+#include <vector>
 
 namespace sts {
 namespace tree {
@@ -42,26 +42,14 @@ namespace tree {
     /*!
      * \details Tree Item.
      * \pre
-     *      - You can use one of the two predefined containers \link sts::tree::TreeItemContainerVector \endlink and \link sts::tree::TreeItemContainerList \endlink.
-     *      - You can specify you own container type, look at \link sts::tree::TreeItemContainerVector \endlink and \link sts::tree::TreeItemContainerList \endlink for example.
      *      - You must not use this class directly.
      *      - The tree item is owner of its children.
      *  When tree item is being destroyed it destroys all its children and remove itself from its parent.
-     *      - If you need to use copy constructor and operator you must implement \link TreeItem::clone() \endlink method.
-     * \warning You should be careful for working with the copy operator and constructor!<br>
-     *          If you don't actually need to use it define one in your derived class in the private level.<br>
-     *          <b> It is necessarily! </b><br>
-     *          Example:
-     * \code
-     *      private:
-     *      YourType &operator=(const YourType &) = delete;
-     *      YourType (const YourType &) = delete;
-     * \endcode
      * 
      * \tparam TYPE your type.
      * \tparam CONTAINER container type.
      */
-    template<typename TYPE, typename CONTAINER = TreeItemContainerVector<TYPE>>
+    template<typename TYPE, typename CONTAINER = std::vector<TYPE*>>
     class TreeItem {
     public:
 

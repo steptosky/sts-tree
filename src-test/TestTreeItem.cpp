@@ -43,8 +43,8 @@ using namespace sts::tree;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /**************************************************************************************************/
 
-class TestTreeItem : public TreeItem<TestTreeItem, TreeItemContainerVector<TestTreeItem>> {
-    typedef TreeItem<TestTreeItem, TreeItemContainerVector<TestTreeItem>> Base;
+class TestTreeItem : public TreeItem<TestTreeItem> {
+    typedef TreeItem<TestTreeItem> Base;
 public:
 
     static int instanceCreated;

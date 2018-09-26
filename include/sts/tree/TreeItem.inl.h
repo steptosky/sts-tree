@@ -213,7 +213,7 @@ namespace tree {
     TYPE * TreeItem<TYPE, CONTAINER>::takeChildAt(const Index index) {
         assert(index < mChildren.size());
         auto child = mChildren[index];
-        mChildren.erase(index);
+        mChildren.erase(mChildren.begin() + index);
         // the child mustn't delete them-self from 
         // its parent as it doesn't make a sense in this case.
         child->mParent = nullptr;
@@ -256,7 +256,7 @@ namespace tree {
         assert(inOutItem->parent() != this);
         inOutItem->removeParent();
         inOutItem->mParent = static_cast<TYPE*>(this);
-        mChildren.push_front(inOutItem);
+        mChildren.insert(mChildren.begin(), inOutItem);
         return inOutItem;
     }
 
@@ -274,7 +274,7 @@ namespace tree {
         assert(inOutItem->parent() != this);
         inOutItem->removeParent();
         inOutItem->mParent = static_cast<TYPE*>(this);
-        mChildren.insert(where, inOutItem);
+        mChildren.insert(mChildren.begin() + where, inOutItem);
         return inOutItem;
     }
 
