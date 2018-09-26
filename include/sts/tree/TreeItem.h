@@ -90,7 +90,7 @@ namespace tree {
         TYPE * childAt(Index index);
         const TYPE * childAt(Index index) const;
 
-        Index childrenCount() const;
+        Index childrenNum() const;
 
         /// @}
         //---------------------------------------------------------------

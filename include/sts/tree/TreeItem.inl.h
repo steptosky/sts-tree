@@ -199,7 +199,7 @@ namespace tree {
      * \return Children's count.
      */
     template<typename TYPE>
-    size_t TreeItem<TYPE>::childrenCount() const {
+    size_t TreeItem<TYPE>::childrenNum() const {
         return mChildren.size();
     }
 
