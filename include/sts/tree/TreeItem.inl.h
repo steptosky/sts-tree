@@ -35,34 +35,15 @@ namespace sts {
 namespace tree {
 
     /**************************************************************************************************/
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////* Constructors/Destructor */////////////////////////////////////
     /**************************************************************************************************/
-
-    /*!
-     * \details Constructor copy.
-     * \warning This constructor needs the \link TreeItem::clone \endlink to be implemented!
-     *          The constructor will clone all children of the input tree item 
-     *          with the \link TreeItem::clone \endlink method.
-     */
-    template<typename TYPE, typename CONTAINER>
-    TreeItem<TYPE, CONTAINER>::TreeItem(const TreeItem & copy)
-        : mParent(nullptr) {
-        cloneContainer(&copy.mChildren);
-    }
-
-    /*! \details Constructor default */
-    template<typename TYPE, typename CONTAINER>
-    TreeItem<TYPE, CONTAINER>::TreeItem()
-        : mParent(nullptr) {}
 
     /*!
      * \details Constructor init parent.
      * \param[in, out] inOutParent
      */
     template<typename TYPE, typename CONTAINER>
-    TreeItem<TYPE, CONTAINER>::TreeItem(TreeItem * inOutParent)
-        : mParent(nullptr) {
-        assert(inOutParent);
+    TreeItem<TYPE, CONTAINER>::TreeItem(TreeItem * inOutParent) {
         TreeItem::setParent(static_cast<TYPE*>(inOutParent));
     }
 
@@ -72,35 +53,8 @@ namespace tree {
      */
     template<typename TYPE, typename CONTAINER>
     TreeItem<TYPE, CONTAINER>::~TreeItem() {
-        TreeItem::setParent(nullptr);
+        removeParent();
         TreeItem::deleteChildren();
-    }
-
-    /**************************************************************************************************/
-    ///////////////////////////////////////////* Operators *////////////////////////////////////////////
-    /**************************************************************************************************/
-
-    /*!
-     * \details Operator copy.
-     * \warning This operator needs the \link TreeItem::clone \endlink and copy constructor to be implemented!
-     * \note The operator uses the algorithm which fixes some problem for situation when there is the pointer to this instance in copying hierarchy.
-     * \remark Position in the tree hierarchy (parent) will not be changed.<br>
-     *         Operator will delete all existing item's children and
-     *         copy children from specified item with the \link TreeItem::clone \endlink method.
-     */
-    template<typename TYPE, typename CONTAINER>
-    TreeItem<TYPE, CONTAINER> & TreeItem<TYPE, CONTAINER>::operator =(const TreeItem & copy) {
-        assert(this != &copy);
-        if (this != &copy) {
-            TreeItem tmp(copy);
-            deleteChildren();
-            for (auto child : tmp.mChildren) {
-                child->mParent = static_cast<TYPE*>(this);
-                mChildren.emplace_back(child);
-            }
-            tmp.mChildren.clear(); // tmp can't delete clones now
-        }
-        return *this;
     }
 
     /**************************************************************************************************/

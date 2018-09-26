@@ -63,11 +63,6 @@ namespace tree {
      */
     template<typename TYPE, typename CONTAINER = TreeItemContainerVector<TYPE>>
     class TreeItem {
-    protected:
-
-        TreeItem(const TreeItem & copy);
-        TreeItem<TYPE, CONTAINER> & operator =(const TreeItem & copy);
-
     public:
 
         typedef std::size_t Index;    /*!< \details Tree item index. */
@@ -77,7 +72,7 @@ namespace tree {
         //---------------------------------------------------------------
         /// @{ 
 
-        TreeItem();
+        TreeItem() = default;
         explicit TreeItem(TreeItem * inOutParent);
         virtual ~TreeItem();
 
@@ -153,7 +148,7 @@ namespace tree {
 
     private:
 
-        TYPE * mParent;
+        TYPE * mParent = nullptr;
         Children mChildren;
 
         void removeFromContainer(Children * inOutContainer, const TreeItem * item);

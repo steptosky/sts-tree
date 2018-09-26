@@ -50,12 +50,6 @@ public:
     static int instanceCreated;
     int mMark;
 
-    TestTreeItem & operator =(const TestTreeItem & input) {
-        Base::operator=(input);
-        mMark = input.mMark;
-        return *this;
-    }
-
     TestTreeItem * clone() const override {
         return new TestTreeItem(*this);
     }
@@ -428,117 +422,6 @@ TEST(TestTreeItem, isChildOf) {
 
     delete treeRoot0;
     delete treeRoot1;
-    ASSERT_EQ(0, TestTreeItem::instanceCreated);
-}
-
-TEST(TestTreeItem, copyOperator_inNew) {
-    TestTreeItem * treeRoot = new TestTreeItem();
-    treeRoot->appendChild(new TestTreeItem);
-    treeRoot->appendChild(new TestTreeItem);
-    treeRoot->appendChild(new TestTreeItem);
-    treeRoot->appendChild(new TestTreeItem);
-    treeRoot->appendChild(new TestTreeItem);
-    ASSERT_EQ(5, treeRoot->childrenCount());
-    ASSERT_EQ(6, TestTreeItem::instanceCreated);
-
-    TestTreeItem * treeForCopy = new TestTreeItem();
-    *treeForCopy = *treeRoot;
-    ASSERT_EQ(5, treeForCopy->childrenCount());
-    ASSERT_EQ(12, TestTreeItem::instanceCreated);
-    ASSERT_TRUE(treeForCopy->parent() == nullptr);
-    ASSERT_TRUE(treeRoot->childAt(0) != treeForCopy->childAt(0));
-    ASSERT_TRUE(treeRoot->childAt(1) != treeForCopy->childAt(1));
-    ASSERT_TRUE(treeRoot->childAt(2) != treeForCopy->childAt(2));
-    ASSERT_TRUE(treeRoot->childAt(3) != treeForCopy->childAt(3));
-    ASSERT_TRUE(treeRoot->childAt(4) != treeForCopy->childAt(4));
-
-    delete treeRoot;
-    ASSERT_EQ(6, TestTreeItem::instanceCreated);
-    delete treeForCopy;
-    ASSERT_EQ(0, TestTreeItem::instanceCreated);
-}
-
-TEST(TestTreeItem, copyConstructor_inNew) {
-    TestTreeItem * treeRoot = new TestTreeItem();
-    treeRoot->appendChild(new TestTreeItem);
-    treeRoot->appendChild(new TestTreeItem);
-    treeRoot->appendChild(new TestTreeItem);
-    treeRoot->appendChild(new TestTreeItem);
-    treeRoot->appendChild(new TestTreeItem);
-    ASSERT_EQ(5, treeRoot->childrenCount());
-    ASSERT_EQ(6, TestTreeItem::instanceCreated);
-
-    TestTreeItem * treeForCopy = new TestTreeItem(*treeRoot);
-    ASSERT_EQ(5, treeForCopy->childrenCount());
-    ASSERT_EQ(12, TestTreeItem::instanceCreated);
-    ASSERT_TRUE(treeForCopy->parent() == nullptr);
-    ASSERT_TRUE(treeRoot->childAt(0) != treeForCopy->childAt(0));
-    ASSERT_TRUE(treeRoot->childAt(1) != treeForCopy->childAt(1));
-    ASSERT_TRUE(treeRoot->childAt(2) != treeForCopy->childAt(2));
-    ASSERT_TRUE(treeRoot->childAt(3) != treeForCopy->childAt(3));
-    ASSERT_TRUE(treeRoot->childAt(4) != treeForCopy->childAt(4));
-
-    delete treeRoot;
-    ASSERT_EQ(6, TestTreeItem::instanceCreated);
-    delete treeForCopy;
-    ASSERT_EQ(0, TestTreeItem::instanceCreated);
-}
-
-//----------------------------------------------
-//                    +root
-//  +root                 tree0   
-//      tree0             tree1
-//      tree1            +tree2
-//     +tree2                 tree0_copy 
-//          tree3             tree1_copy
-//          tree4            +tree2_copy
-//                                tree3_copy
-//                                tree4_copy
-//    tree2 = *root;    //
-//----------------------------------------------
-TEST(TestTreeItem, copyOperator_inExist) {
-    // Now constructor and operator copy are using same function inside and they are equivalent.
-    TestTreeItem * treeRoot = new TestTreeItem();
-    TestTreeItem * tree0 = treeRoot->appendChild(new TestTreeItem(0));
-    TestTreeItem * tree1 = treeRoot->appendChild(new TestTreeItem(1));
-    TestTreeItem * tree2 = treeRoot->appendChild(new TestTreeItem(2));
-
-    TestTreeItem * tree3 = tree2->appendChild(new TestTreeItem(3));
-    TestTreeItem * tree4 = tree2->appendChild(new TestTreeItem(4));
-
-    ASSERT_EQ(0, tree0->mMark);
-    ASSERT_EQ(1, tree1->mMark);
-    ASSERT_EQ(2, tree2->mMark);
-    ASSERT_EQ(3, tree3->mMark);
-    ASSERT_EQ(4, tree4->mMark);
-
-    ASSERT_EQ(3, treeRoot->childrenCount());
-    ASSERT_EQ(6, TestTreeItem::instanceCreated);
-    //---------------------------------
-    *tree2 = *treeRoot;
-    ASSERT_EQ(9, TestTreeItem::instanceCreated);
-    ASSERT_TRUE(tree2->parent() == treeRoot);
-    ASSERT_EQ(3, treeRoot->childrenCount());
-    ASSERT_EQ(2, treeRoot->indexOf(tree2));
-    ASSERT_TRUE(treeRoot->childAt(0) == tree0);
-    ASSERT_TRUE(treeRoot->childAt(1) == tree1);
-    ASSERT_TRUE(treeRoot->childAt(2) == tree2);
-    ASSERT_EQ(3, tree2->childrenCount());
-    ASSERT_EQ(2, tree2->childAt(2)->childrenCount());
-    //---------------------------------
-    ASSERT_EQ(0, tree0->mMark);
-    ASSERT_EQ(1, tree1->mMark);
-
-    ASSERT_EQ(-1, tree2->mMark); // -1 is copied from the root
-    ASSERT_EQ(3, tree2->childrenCount());
-    ASSERT_EQ(0, tree2->childAt(0)->mMark);
-    ASSERT_EQ(1, tree2->childAt(1)->mMark);
-    ASSERT_EQ(2, tree2->childAt(2)->mMark); // this value depends how the operator is implemented.
-    ASSERT_EQ(2, tree2->childAt(2)->childrenCount());
-    ASSERT_EQ(3, tree2->childAt(2)->childAt(0)->mMark);
-    ASSERT_EQ(4, tree2->childAt(2)->childAt(1)->mMark);
-    //---------------------------------
-    delete treeRoot;
     ASSERT_EQ(0, TestTreeItem::instanceCreated);
 }
 
