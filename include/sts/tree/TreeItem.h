@@ -121,12 +121,12 @@ namespace tree {
         //---------------------------------------------------------------
         /// @{
 
-        virtual TYPE * takeChildAt(Index index);
         virtual typename Children::iterator eraseChild(typename Children::iterator position);
-        virtual typename Children::iterator deleteChild(typename Children::iterator position);
-        virtual void deleteChild(Index index);
-        virtual bool deleteChild(TYPE * inOutItem);
         virtual void deleteChildren();
+
+        typename Children::iterator deleteChild(typename Children::iterator position);
+        bool deleteChild(TYPE * inOutItem);
+
 
         /// @}
         //---------------------------------------------------------------

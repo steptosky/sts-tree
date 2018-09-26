@@ -303,20 +303,6 @@ namespace tree {
     /**************************************************************************************************/
 
     /*!
-     * \details Takes the child by its index and removes it from the children list.
-     *          The item will not be child's owner anymore, so don't forget to delete it yourself.
-     * \param [in] index child index that must be removed from the children list and returned.
-     * \return Item that is removed from the children list.
-     */
-    template<typename TYPE>
-    TYPE * TreeItem<TYPE>::takeChildAt(const Index index) {
-        assert(index < mChildren.size());
-        auto child = mChildren[index];
-        eraseChild(mChildren.begin() + index);
-        return child;
-    }
-
-    /*!
      * \details Just removes child from hierarchy. It doesn't destroy the item.
      * \param [in] position
      */
@@ -339,17 +325,6 @@ namespace tree {
         auto out = eraseChild(position);
         delete item;
         return out;
-    }
-
-    /*!
-     * \details Removes child from item's children list by child's index. 
-     *          The child's destructor will be called while removing.
-     * \param [in] index of a child that must be deleted.
-     */
-    template<typename TYPE>
-    void TreeItem<TYPE>::deleteChild(const Index index) {
-        assert(index < mChildren.size());
-        delete takeChildAt(index);
     }
 
     /*!
