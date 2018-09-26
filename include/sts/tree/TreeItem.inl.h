@@ -42,8 +42,8 @@ namespace tree {
      * \details Constructor init parent.
      * \param[in, out] inOutParent
      */
-    template<typename TYPE, typename CONTAINER>
-    TreeItem<TYPE, CONTAINER>::TreeItem(TreeItem * inOutParent) {
+    template<typename TYPE>
+    TreeItem<TYPE>::TreeItem(TreeItem * inOutParent) {
         TreeItem::setParent(static_cast<TYPE*>(inOutParent));
     }
 
@@ -51,8 +51,8 @@ namespace tree {
      * \details Destructor
      * \warning The destructor destroys all the item's children and removes this item from its parent.
      */
-    template<typename TYPE, typename CONTAINER>
-    TreeItem<TYPE, CONTAINER>::~TreeItem() {
+    template<typename TYPE>
+    TreeItem<TYPE>::~TreeItem() {
         removeParent();
         TreeItem::deleteChildren();
     }
@@ -65,8 +65,8 @@ namespace tree {
      * \details Checks whether the item has a parent. No parent means the item is root.
      * \return True if the item is root otherwise false.
      */
-    template<typename TYPE, typename CONTAINER>
-    bool TreeItem<TYPE, CONTAINER>::isRoot() const {
+    template<typename TYPE>
+    bool TreeItem<TYPE>::isRoot() const {
         return (mParent == nullptr);
     }
 
@@ -74,8 +74,8 @@ namespace tree {
      * \details Gets the tree hierarchy root (recursive by parents up to the root).
      * \return Root of the tree hierarchy.
      */
-    template<typename TYPE, typename CONTAINER>
-    TYPE * TreeItem<TYPE, CONTAINER>::root() {
+    template<typename TYPE>
+    TYPE * TreeItem<TYPE>::root() {
         auto currItem = static_cast<TYPE*>(this);
         do {
             if (currItem->isRoot()) {
@@ -89,8 +89,8 @@ namespace tree {
      * \details Gets the tree hierarchy root (recursive by parents up to the root).
      * \return Root of the tree hierarchy.
      */
-    template<typename TYPE, typename CONTAINER>
-    const TYPE * TreeItem<TYPE, CONTAINER>::root() const {
+    template<typename TYPE>
+    const TYPE * TreeItem<TYPE>::root() const {
         auto currItem = static_cast<TYPE*>(this);
         do {
             if (currItem->isRoot()) {
@@ -109,8 +109,8 @@ namespace tree {
      * \remark You can set parent as the nullptr then the item will be as a root.
      * \param [in, out] inOutParent pointer to new parent.
      */
-    template<typename TYPE, typename CONTAINER>
-    void TreeItem<TYPE, CONTAINER>::setParent(TYPE * inOutParent) {
+    template<typename TYPE>
+    void TreeItem<TYPE>::setParent(TYPE * inOutParent) {
         if (mParent == inOutParent) {
             return;
         }
@@ -126,8 +126,8 @@ namespace tree {
      * \details Gets the item's parent.
      * \return If the item has the parent then pointer to it otherwise nullptr.
      */
-    template<typename TYPE, typename CONTAINER>
-    TYPE * TreeItem<TYPE, CONTAINER>::parent() {
+    template<typename TYPE>
+    TYPE * TreeItem<TYPE>::parent() {
         return mParent;
     }
 
@@ -135,8 +135,8 @@ namespace tree {
      * \details Gets the item's parent.
      * \return Pointer to item's parent or nullptr if the parent isn't set.
      */
-    template<typename TYPE, typename CONTAINER>
-    const TYPE * TreeItem<TYPE, CONTAINER>::parent() const {
+    template<typename TYPE>
+    const TYPE * TreeItem<TYPE>::parent() const {
         return mParent;
     }
 
@@ -149,8 +149,8 @@ namespace tree {
      * \param [in] index
      * \return Pointer to the child.
      */
-    template<typename TYPE, typename CONTAINER>
-    TYPE * TreeItem<TYPE, CONTAINER>::operator[](const Index index) {
+    template<typename TYPE>
+    TYPE * TreeItem<TYPE>::operator[](const Index index) {
         assert(index < mChildren.size());
         return mChildren[index];
     }
@@ -160,8 +160,8 @@ namespace tree {
      * \param [in] index
      * \return Pointer to the child.
      */
-    template<typename TYPE, typename CONTAINER>
-    const TYPE * TreeItem<TYPE, CONTAINER>::operator[](const Index index) const {
+    template<typename TYPE>
+    const TYPE * TreeItem<TYPE>::operator[](const Index index) const {
         assert(index < mChildren.size());
         return mChildren[index];
     }
@@ -175,8 +175,8 @@ namespace tree {
      * \param [in] index
      * \return Pointer to the child.
      */
-    template<typename TYPE, typename CONTAINER>
-    TYPE * TreeItem<TYPE, CONTAINER>::childAt(const Index index) {
+    template<typename TYPE>
+    TYPE * TreeItem<TYPE>::childAt(const Index index) {
         return (*this)[index];
     }
 
@@ -185,8 +185,8 @@ namespace tree {
      * \param [in] index
      * \return Pointer to the child.
      */
-    template<typename TYPE, typename CONTAINER>
-    const TYPE * TreeItem<TYPE, CONTAINER>::childAt(const Index index) const {
+    template<typename TYPE>
+    const TYPE * TreeItem<TYPE>::childAt(const Index index) const {
         return (*this)[index];
     }
 
@@ -198,8 +198,8 @@ namespace tree {
      * \details Gets the item children's count.
      * \return Children's count.
      */
-    template<typename TYPE, typename CONTAINER>
-    size_t TreeItem<TYPE, CONTAINER>::childrenCount() const {
+    template<typename TYPE>
+    size_t TreeItem<TYPE>::childrenCount() const {
         return mChildren.size();
     }
 
@@ -209,11 +209,11 @@ namespace tree {
      * \param [in] index child index that must be removed from the children list and returned.
      * \return Item that is removed from the children list.
      */
-    template<typename TYPE, typename CONTAINER>
-    TYPE * TreeItem<TYPE, CONTAINER>::takeChildAt(const Index index) {
+    template<typename TYPE>
+    TYPE * TreeItem<TYPE>::takeChildAt(const Index index) {
         assert(index < mChildren.size());
         auto child = mChildren[index];
-        mChildren.erase(index);
+        mChildren.erase(mChildren.begin() + index);
         // the child mustn't delete them-self from 
         // its parent as it doesn't make a sense in this case.
         child->mParent = nullptr;
@@ -224,8 +224,8 @@ namespace tree {
      * \details Access to the constant children list.
      * \return Reference to the children list.
      */
-    template<typename TYPE, typename CONTAINER>
-    const CONTAINER & TreeItem<TYPE, CONTAINER>::children() const {
+    template<typename TYPE>
+    const typename TreeItem<TYPE>::Container & TreeItem<TYPE>::children() const {
         return mChildren;
     }
 
@@ -235,8 +235,8 @@ namespace tree {
      *          You must understand what you do.
      * \return Reference to the children list.
      */
-    template<typename TYPE, typename CONTAINER>
-    CONTAINER & TreeItem<TYPE, CONTAINER>::childrenAccess() {
+    template<typename TYPE>
+    typename TreeItem<TYPE>::Container & TreeItem<TYPE>::childrenAccess() {
         return mChildren;
     }
 
@@ -250,13 +250,13 @@ namespace tree {
      * \param [in, out] inOutItem tree item that will be added as a child.
      * \return Pointer to the item which is the input parameter.
      */
-    template<typename TYPE, typename CONTAINER>
-    TYPE * TreeItem<TYPE, CONTAINER>::prependChild(TYPE * inOutItem) {
+    template<typename TYPE>
+    TYPE * TreeItem<TYPE>::prependChild(TYPE * inOutItem) {
         assert(inOutItem);
         assert(inOutItem->parent() != this);
         inOutItem->removeParent();
         inOutItem->mParent = static_cast<TYPE*>(this);
-        mChildren.push_front(inOutItem);
+        mChildren.insert(mChildren.begin(), inOutItem);
         return inOutItem;
     }
 
@@ -267,14 +267,14 @@ namespace tree {
      * \param [in, out] inOutItem tree item that will be inserted as a child.
      * \return Pointer to the item which is the input parameter.
      */
-    template<typename TYPE, typename CONTAINER>
-    TYPE * TreeItem<TYPE, CONTAINER>::insertChild(const Index where, TYPE * inOutItem) {
+    template<typename TYPE>
+    TYPE * TreeItem<TYPE>::insertChild(const Index where, TYPE * inOutItem) {
         assert(inOutItem);
         assert(where <= mChildren.size());
         assert(inOutItem->parent() != this);
         inOutItem->removeParent();
         inOutItem->mParent = static_cast<TYPE*>(this);
-        mChildren.insert(where, inOutItem);
+        mChildren.insert(mChildren.begin() + where, inOutItem);
         return inOutItem;
     }
 
@@ -284,8 +284,8 @@ namespace tree {
      * \param [in, out] inOutItem tree item that will be added as a child.
      * \return Pointer to the item which is the input parameter.
      */
-    template<typename TYPE, typename CONTAINER>
-    TYPE * TreeItem<TYPE, CONTAINER>::appendChild(TYPE * inOutItem) {
+    template<typename TYPE>
+    TYPE * TreeItem<TYPE>::appendChild(TYPE * inOutItem) {
         assert(inOutItem);
         assert(inOutItem->parent() != this);
         inOutItem->removeParent();
@@ -303,8 +303,8 @@ namespace tree {
      *          The child's destructor will be called while removing.
      * \param [in] index of a child that must be deleted.
      */
-    template<typename TYPE, typename CONTAINER>
-    void TreeItem<TYPE, CONTAINER>::deleteChildAt(const Index index) {
+    template<typename TYPE>
+    void TreeItem<TYPE>::deleteChildAt(const Index index) {
         assert(index < mChildren.size());
         delete takeChildAt(index);
     }
@@ -312,8 +312,8 @@ namespace tree {
     /*!
      * \details Deletes <b>ALL</b> item's children.
      */
-    template<typename TYPE, typename CONTAINER>
-    void TreeItem<TYPE, CONTAINER>::deleteChildren() {
+    template<typename TYPE>
+    void TreeItem<TYPE>::deleteChildren() {
         for (auto child : mChildren) {
             // the children mustn't delete them-self from 
             // their parent as it doesn't make a sense in this case.
@@ -329,8 +329,8 @@ namespace tree {
      * \param [in, out] inOutItem pointer to a children that must be deleted.
      * \return True if the child by the specified pointer was deleted otherwise false.
      */
-    template<typename TYPE, typename CONTAINER>
-    bool TreeItem<TYPE, CONTAINER>::deleteChild(TYPE * inOutItem) {
+    template<typename TYPE>
+    bool TreeItem<TYPE>::deleteChild(TYPE * inOutItem) {
         const auto index = indexOf(inOutItem);
         if (index == npos) {
             return false;
@@ -347,8 +347,8 @@ namespace tree {
      * \details Checks whether the item has children.
      * \return True if the item has children otherwise false.
      */
-    template<typename TYPE, typename CONTAINER>
-    bool TreeItem<TYPE, CONTAINER>::hasChildren() const {
+    template<typename TYPE>
+    bool TreeItem<TYPE>::hasChildren() const {
         return !mChildren.empty();
     }
 
@@ -357,8 +357,8 @@ namespace tree {
      * \param [in] item pointer to tree item whose index must be found.
      * \return Index if specified pointer that was found otherwise \link TreeItem::npos \endlink.
      */
-    template<typename TYPE, typename CONTAINER>
-    size_t TreeItem<TYPE, CONTAINER>::indexOf(const TYPE * item) const {
+    template<typename TYPE>
+    size_t TreeItem<TYPE>::indexOf(const TYPE * item) const {
         Index outIndex = 0;
         for (auto child : mChildren) {
             if (child == item) {
@@ -378,8 +378,8 @@ namespace tree {
      * \details If the item doesn't have any children then the item is leaf.
      * \return True if the item is leaf otherwise false.
      */
-    template<typename TYPE, typename CONTAINER>
-    bool TreeItem<TYPE, CONTAINER>::isLeaf() const {
+    template<typename TYPE>
+    bool TreeItem<TYPE>::isLeaf() const {
         return mChildren.empty();
     }
 
@@ -388,8 +388,8 @@ namespace tree {
      * \details If the item has some children then the item is branch.
      * \return True if the item is branch otherwise false.
      */
-    template<typename TYPE, typename CONTAINER>
-    bool TreeItem<TYPE, CONTAINER>::isBranch() const {
+    template<typename TYPE>
+    bool TreeItem<TYPE>::isBranch() const {
         return !mChildren.empty();
     }
 
@@ -399,8 +399,8 @@ namespace tree {
      * \param [in] parent a parent that you want to be checked.
      * \return True if this item has specified item as a parent otherwise false.
      */
-    template<typename TYPE, typename CONTAINER>
-    bool TreeItem<TYPE, CONTAINER>::isChildOf(const TYPE * parent) const {
+    template<typename TYPE>
+    bool TreeItem<TYPE>::isChildOf(const TYPE * parent) const {
         if (!mParent) {
             return false;
         }
@@ -419,8 +419,8 @@ namespace tree {
      * \details default implementation is \code return nullptr; \endcode
      * \return Pointer to a cloned tree item.
      */
-    template<typename TYPE, typename CONTAINER>
-    TYPE * TreeItem<TYPE, CONTAINER>::clone() const {
+    template<typename TYPE>
+    TYPE * TreeItem<TYPE>::clone() const {
         return nullptr;
     }
 
@@ -431,8 +431,8 @@ namespace tree {
     /*!
      * \details Removes item's parent.
      */
-    template<typename TYPE, typename CONTAINER>
-    void TreeItem<TYPE, CONTAINER>::removeParent() {
+    template<typename TYPE>
+    void TreeItem<TYPE>::removeParent() {
         if (mParent != nullptr) {
             assert(mParent->indexOf(static_cast<TYPE*>(this)) != npos);
             removeFromContainer(&mParent->mChildren, this);
@@ -445,8 +445,8 @@ namespace tree {
      * \param [in, out] inOutContainer
      * \param [in] item
      */
-    template<typename TYPE, typename CONTAINER>
-    void TreeItem<TYPE, CONTAINER>::removeFromContainer(Children * inOutContainer, const TreeItem * item) {
+    template<typename TYPE>
+    void TreeItem<TYPE>::removeFromContainer(Children * inOutContainer, const TreeItem * item) {
         assert(inOutContainer);
         assert(item);
         for (auto it = inOutContainer->begin(); it != inOutContainer->end(); ++it) {
