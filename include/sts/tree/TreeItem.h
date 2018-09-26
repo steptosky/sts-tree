@@ -54,7 +54,7 @@ namespace tree {
 
         typedef std::vector<TYPE*> Container;
         typedef std::size_t Index;    /*!< \details Tree item index. */
-        const Index npos = Index(-1); /*!< \details Means no position. */
+        static const Index npos = Index(-1); /*!< \details Means no position. */
         typedef Container Children;
 
         //---------------------------------------------------------------
