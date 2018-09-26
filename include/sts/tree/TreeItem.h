@@ -113,7 +113,6 @@ namespace tree {
         //---------------------------------------------------------------
         /// @{
 
-        virtual TYPE * prependChild(TYPE * inOutItem);
         virtual TYPE * insertChild(Index where, TYPE * inOutItem);
         virtual TYPE * appendChild(TYPE * inOutItem);
 

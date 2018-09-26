@@ -269,17 +269,6 @@ namespace tree {
     /**************************************************************************************************/
 
     /*!
-     * \details Adds a child to the start of the children list.
-     * \remark The item takes ownership of the specified pointer.
-     * \param [in, out] inOutItem tree item that will be added as a child.
-     * \return Pointer to the item which is the input parameter.
-     */
-    template<typename TYPE>
-    TYPE * TreeItem<TYPE>::prependChild(TYPE * inOutItem) {
-        return insertChild(0, inOutItem);
-    }
-
-    /*!
      * \details Inserts child by index.
      * \remark The Tree item takes ownership of the specified pointer.
      * \param [in] where index where new child must be inserted.

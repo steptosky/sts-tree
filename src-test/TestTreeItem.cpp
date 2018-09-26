@@ -76,7 +76,7 @@ int TestTreeItem::instances = 0;
 
 TEST(TestTreeItem, isRoot) {
     std::unique_ptr<TestTreeItem> treeRoot = std::make_unique<TestTreeItem>();
-    const auto tree0 = treeRoot->prependChild(new TestTreeItem);
+    const auto tree0 = treeRoot->appendChild(new TestTreeItem);
     //---------------------------------
     ASSERT_TRUE(treeRoot->isRoot());
     ASSERT_FALSE(tree0->isRoot());
@@ -211,30 +211,6 @@ TEST(TestTreeItem, takeChildAt) {
 /**************************************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /**************************************************************************************************/
-
-TEST(TestTreeItem, prepend) {
-    std::unique_ptr<TestTreeItem> treeRoot = std::make_unique<TestTreeItem>();
-    auto tree0 = treeRoot->prependChild(new TestTreeItem);
-    auto tree1 = treeRoot->prependChild(new TestTreeItem);
-    auto tree2 = treeRoot->prependChild(new TestTreeItem);
-    auto tree3 = treeRoot->prependChild(new TestTreeItem);
-    auto tree4 = treeRoot->prependChild(new TestTreeItem);
-    //---------------------------------
-    ASSERT_EQ(5, treeRoot->childrenCount());
-    ASSERT_TRUE(treeRoot->childAt(0) == tree4);
-    ASSERT_TRUE(treeRoot->childAt(1) == tree3);
-    ASSERT_TRUE(treeRoot->childAt(2) == tree2);
-    ASSERT_TRUE(treeRoot->childAt(3) == tree1);
-    ASSERT_TRUE(treeRoot->childAt(4) == tree0);
-    ASSERT_TRUE(tree0->parent() == treeRoot.get());
-    ASSERT_TRUE(tree1->parent() == treeRoot.get());
-    ASSERT_TRUE(tree2->parent() == treeRoot.get());
-    ASSERT_TRUE(tree3->parent() == treeRoot.get());
-    ASSERT_TRUE(tree4->parent() == treeRoot.get());
-    ASSERT_EQ(6, TestTreeItem::instances);
-    treeRoot.reset();
-    ASSERT_EQ(0, TestTreeItem::instances);
-}
 
 TEST(TestTreeItem, append) {
     std::unique_ptr<TestTreeItem> treeRoot = std::make_unique<TestTreeItem>();
