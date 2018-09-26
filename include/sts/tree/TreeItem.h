@@ -114,7 +114,7 @@ namespace tree {
         //---------------------------------------------------------------
         /// @{
 
-        virtual TYPE * insertChild(typename Children::iterator position, TYPE * inOutItem);
+        virtual typename Children::iterator insertChild(typename Children::iterator position, TYPE * inOutItem);
         virtual TYPE * appendChild(TYPE * inOutItem);
 
         /// @}
@@ -122,17 +122,17 @@ namespace tree {
         /// @{
 
         virtual typename Children::iterator eraseChild(typename Children::iterator position);
-        virtual void deleteChildren();
-
         typename Children::iterator deleteChild(typename Children::iterator position);
-        bool deleteChild(TYPE * inOutItem);
 
+        bool deleteChild(TYPE * inOutItem);
+        virtual void deleteChildren();
 
         /// @}
         //---------------------------------------------------------------
         /// @{
 
         bool hasChildren() const;
+        void reserve(std::size_t n);
 
         /// @}
         //---------------------------------------------------------------

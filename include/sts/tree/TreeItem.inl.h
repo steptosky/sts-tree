@@ -265,26 +265,25 @@ namespace tree {
     /**************************************************************************************************/
 
     /*!
-     * \details Inserts child by index.
+     * \details Inserts child by iterator.
      * \remark The Tree item takes ownership of the specified pointer.
      * \param [in] position where new child must be inserted.
-     * \param [in, out] inOutItem tree item that will be inserted as a child.
-     * \return Pointer to the item which is the input parameter.
+     * \param [in, out] inOutItem item that will be inserted as a child.
+     * \return An iterator that points to the first of the newly inserted elements.
      */
     template<typename TYPE>
-    TYPE * TreeItem<TYPE>::insertChild(typename Children::iterator position, TYPE * inOutItem) {
+    typename TreeItem<TYPE>::Children::iterator TreeItem<TYPE>::insertChild(typename Children::iterator position, TYPE * inOutItem) {
         assert(inOutItem);
         assert(position != mChildren.end());
         assert(inOutItem->parent() != this);
         inOutItem->removeParent();
         inOutItem->mParent = static_cast<TYPE*>(this);
-        mChildren.insert(position, inOutItem);
-        return inOutItem;
+        return mChildren.insert(position, inOutItem);
     }
 
     /*!
-     * \details Adds a child to the and of the children list.
-     * \remark The Tree item takes ownership of the specified pointer.
+     * \details Adds a child to the and of the item's children list.
+     * \remark The item takes ownership of the specified pointer.
      * \param [in, out] inOutItem tree item that will be added as a child.
      * \return Pointer to the item which is the input parameter.
      */
@@ -303,8 +302,10 @@ namespace tree {
     /**************************************************************************************************/
 
     /*!
-     * \details Just removes child from hierarchy. It doesn't destroy the item.
+     * \details Just removes child from hierarchy. It doesn't destroy the child item.
      * \param [in] position
+     * \return An iterator pointing to the new location of the element that followed the last element erased by the function call.
+     *         This is the container end if the operation erased the last element in the sequence.
      */
     template<typename TYPE>
     typename TreeItem<TYPE>::Children::iterator TreeItem<TYPE>::eraseChild(const typename Children::iterator position) {
@@ -314,9 +315,11 @@ namespace tree {
     }
 
     /*!
-     * \details Removes child from item's children list by iterator.
+     * \details Deletes child from item's children list by iterator.
      *          The child's destructor will be called while removing.
      * \param [in] position
+     * \return An iterator pointing to the new location of the element that followed the last element erased by the function call.
+     *         This is the container end if the operation erased the last element in the sequence.
      */
     template<typename TYPE>
     typename TreeItem<TYPE>::Children::iterator TreeItem<TYPE>::deleteChild(const typename Children::iterator position) {
@@ -328,8 +331,8 @@ namespace tree {
     }
 
     /*!
-     * \details Removes child from item's children list by child's pointer.
-     *          The child's destructor will be called while removing.
+     * \details Deletes child from the item's children list by child's pointer.
+     *          The child's destructor will be called while deleting.
      * \param [in, out] inOutItem pointer to a children that must be deleted.
      * \return True if the child by the specified pointer was deleted otherwise false.
      */
@@ -345,7 +348,7 @@ namespace tree {
     }
 
     /*!
-     * \details Deletes <b>ALL</b> item's children.
+     * \details Deletes <b>ALL</b> the item's children.
      */
     template<typename TYPE>
     void TreeItem<TYPE>::deleteChildren() {
@@ -369,6 +372,15 @@ namespace tree {
     template<typename TYPE>
     bool TreeItem<TYPE>::hasChildren() const {
         return !mChildren.empty();
+    }
+
+    /*!
+     * \details Requests that the children list capacity be at least enough to contain n elements.
+     * \param [in] n minimum capacity for the vector.
+     */
+    template<typename TYPE>
+    void TreeItem<TYPE>::reserve(std::size_t n) {
+        return mChildren.reserve(n);
     }
 
     /**************************************************************************************************/
