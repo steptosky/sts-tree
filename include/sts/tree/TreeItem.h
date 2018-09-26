@@ -65,8 +65,8 @@ namespace tree {
     class TreeItem {
     protected:
 
-        TreeItem(const TreeItem<TYPE, CONTAINER> & copy);
-        TreeItem<TYPE, CONTAINER> & operator =(const TreeItem<TYPE, CONTAINER> & copy);
+        TreeItem(const TreeItem & copy);
+        TreeItem<TYPE, CONTAINER> & operator =(const TreeItem & copy);
 
     public:
 
@@ -78,7 +78,7 @@ namespace tree {
         /// @{ 
 
         TreeItem();
-        explicit TreeItem(TreeItem<TYPE, CONTAINER> * inOutParent);
+        explicit TreeItem(TreeItem * inOutParent);
         virtual ~TreeItem();
 
         /// @}

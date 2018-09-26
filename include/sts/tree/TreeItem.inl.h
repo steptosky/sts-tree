@@ -45,7 +45,7 @@ namespace tree {
      *          with the \link TreeItem::clone \endlink method.
      */
     template<typename TYPE, typename CONTAINER>
-    TreeItem<TYPE, CONTAINER>::TreeItem(const TreeItem<TYPE, CONTAINER> & copy)
+    TreeItem<TYPE, CONTAINER>::TreeItem(const TreeItem & copy)
         : mParent(nullptr) {
         cloneContainer(&copy.mChildren);
     }
@@ -60,7 +60,7 @@ namespace tree {
      * \param[in, out] inOutParent
      */
     template<typename TYPE, typename CONTAINER>
-    TreeItem<TYPE, CONTAINER>::TreeItem(TreeItem<TYPE, CONTAINER> * inOutParent)
+    TreeItem<TYPE, CONTAINER>::TreeItem(TreeItem * inOutParent)
         : mParent(nullptr) {
         assert(inOutParent);
         TreeItem::setParent(static_cast<TYPE*>(inOutParent));
@@ -89,10 +89,10 @@ namespace tree {
      *         copy children from specified item with the \link TreeItem::clone \endlink method.
      */
     template<typename TYPE, typename CONTAINER>
-    TreeItem<TYPE, CONTAINER> & TreeItem<TYPE, CONTAINER>::operator =(const TreeItem<TYPE, CONTAINER> & copy) {
+    TreeItem<TYPE, CONTAINER> & TreeItem<TYPE, CONTAINER>::operator =(const TreeItem & copy) {
         assert(this != &copy);
         if (this != &copy) {
-            TreeItem<TYPE, CONTAINER> tmp(copy);
+            TreeItem tmp(copy);
             deleteChildren();
             for (auto child : tmp.mChildren) {
                 child->mParent = static_cast<TYPE*>(this);
@@ -476,7 +476,7 @@ namespace tree {
      * \param [in] item
      */
     template<typename TYPE, typename CONTAINER>
-    void TreeItem<TYPE, CONTAINER>::removeFromContainer(Children * inOutContainer, const TreeItem<TYPE, CONTAINER> * item) {
+    void TreeItem<TYPE, CONTAINER>::removeFromContainer(Children * inOutContainer, const TreeItem * item) {
         assert(inOutContainer);
         assert(item);
         for (auto it = inOutContainer->begin(); it != inOutContainer->end(); ++it) {
