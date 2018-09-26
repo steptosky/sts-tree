@@ -46,16 +46,14 @@ namespace tree {
      */
     template<typename TYPE, typename CONTAINER>
     TreeItem<TYPE, CONTAINER>::TreeItem(const TreeItem<TYPE, CONTAINER> & copy)
-        : mParent(nullptr),
-          mRemoveFromParent(true) {
+        : mParent(nullptr) {
         cloneContainer(&copy.mChildren);
     }
 
     /*! \details Constructor default */
     template<typename TYPE, typename CONTAINER>
     TreeItem<TYPE, CONTAINER>::TreeItem()
-        : mParent(nullptr),
-          mRemoveFromParent(true) {}
+        : mParent(nullptr) {}
 
     /*!
      * \details Constructor init parent.
@@ -63,8 +61,7 @@ namespace tree {
      */
     template<typename TYPE, typename CONTAINER>
     TreeItem<TYPE, CONTAINER>::TreeItem(TreeItem<TYPE, CONTAINER> * inOutParent)
-        : mParent(nullptr),
-          mRemoveFromParent(true) {
+        : mParent(nullptr) {
         assert(inOutParent);
         TreeItem::setParent(static_cast<TYPE*>(inOutParent));
     }
@@ -75,13 +72,8 @@ namespace tree {
      */
     template<typename TYPE, typename CONTAINER>
     TreeItem<TYPE, CONTAINER>::~TreeItem() {
-        if (mRemoveFromParent) {
-            TreeItem::setParent(nullptr);
-        }
-        for (auto & it : mChildren) {
-            it->mRemoveFromParent = false;
-            delete it;
-        }
+        TreeItem::setParent(nullptr);
+        TreeItem::deleteChildren();
     }
 
     /**************************************************************************************************/
@@ -208,7 +200,7 @@ namespace tree {
     }
 
     /*!
-     * \details Gets the the child by its index.
+     * \details Gets the child by its index.
      * \param [in] index
      * \return Pointer to the child.
      */
@@ -219,7 +211,7 @@ namespace tree {
     }
 
     /*!
-     * \details Gets the the child by its index.
+     * \details Gets the child by its index.
      * \param [in] index
      * \return Pointer to the child.
      */
@@ -230,7 +222,7 @@ namespace tree {
     }
 
     /*!
-     * \details Takes the the child by its index and removes it from the children list.
+     * \details Takes the child by its index and removes it from the children list.
      *          The item will not be child's owner anymore, so don't forget to delete it yourself.
      * \param [in] index child index that must be removed from the children list and returned.
      * \return Item that is removed from the children list.
@@ -324,13 +316,15 @@ namespace tree {
     /*!
      * \details Removes child from item's children list by child's index. 
      *          The child's destructor will be called while removing.
-     * \param [in] index index of a child that must be deleted.
+     * \param [in] index of a child that must be deleted.
      */
     template<typename TYPE, typename CONTAINER>
     void TreeItem<TYPE, CONTAINER>::deleteChild(const Index index) {
         assert(index < mChildren.size());
         TYPE * val = mChildren.erase(index);
-        val->mRemoveFromParent = false;
+        // the child mustn't delete them-self from 
+        // its parent as it doesn't make a sense in this case.
+        val->mParent = nullptr;
         delete val;
     }
 
@@ -339,9 +333,11 @@ namespace tree {
      */
     template<typename TYPE, typename CONTAINER>
     void TreeItem<TYPE, CONTAINER>::deleteChildren() {
-        for (auto & it : mChildren) {
-            it->mRemoveFromParent = false;
-            delete it;
+        for (auto & child : mChildren) {
+            // the children mustn't delete them-self from 
+            // their parent as it doesn't make a sense in this case.
+            child->mParent = nullptr;
+            delete child;
         }
         mChildren.clear();
     }
@@ -355,7 +351,7 @@ namespace tree {
     template<typename TYPE, typename CONTAINER>
     bool TreeItem<TYPE, CONTAINER>::deleteChild(TYPE * inOutItem) {
         assert(inOutItem);
-        const std::size_t index = indexOf(inOutItem);
+        const auto index = indexOf(inOutItem);
         if (index == npos) {
             return false;
         }
