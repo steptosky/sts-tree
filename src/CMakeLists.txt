@@ -65,7 +65,7 @@ add_library(${TARGET} INTERFACE)
 #----------------------------------------------------------------------------------#
 # cxx standard 
 
-target_compile_features(${TARGET} INTERFACE cxx_std_11)
+target_compile_features(${TARGET} INTERFACE cxx_std_14)
 
 #----------------------------------------------------------------------------------#
 # linkage 
