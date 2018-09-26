@@ -85,27 +85,27 @@ namespace tree {
         //---------------------------------------------------------------
         /// @{
 
-        virtual bool isRoot() const;
-        virtual TYPE * root();
-        virtual const TYPE * root() const;
+        bool isRoot() const;
+        TYPE * root();
+        const TYPE * root() const;
 
         /// @}
         //---------------------------------------------------------------
         /// @{
 
         virtual void setParent(TYPE * inOutParent);
-        virtual TYPE * parent();
-        virtual const TYPE * parent() const;
+        TYPE * parent();
+        const TYPE * parent() const;
 
         /// @}
         //---------------------------------------------------------------
         /// @{
 
-        virtual Index childrenCount() const;
-        virtual TYPE * childAt(Index index);
-        virtual const TYPE * childAt(Index index) const;
+        Index childrenCount() const;
+        TYPE * childAt(Index index);
+        const TYPE * childAt(Index index) const;
+        const Children & children() const;
         virtual TYPE * takeChildAt(Index index);
-        virtual const Children & children() const;
 
         /// @}
         //---------------------------------------------------------------
@@ -127,16 +127,16 @@ namespace tree {
         //---------------------------------------------------------------
         /// @{
 
-        virtual bool hasChildren() const;
-        virtual Index indexOf(const TYPE * item) const;
+        bool hasChildren() const;
+        Index indexOf(const TYPE * item) const;
 
         /// @}
         //---------------------------------------------------------------
         /// @{
 
-        virtual bool isLeaf() const;
-        virtual bool isBranch() const;
-        virtual bool isChildOf(const TYPE * parent) const;
+        bool isLeaf() const;
+        bool isBranch() const;
+        bool isChildOf(const TYPE * parent) const;
 
         /// @}
         //---------------------------------------------------------------
@@ -149,7 +149,7 @@ namespace tree {
 
     protected:
 
-        Children & children();
+        Children & childrenAccess();
 
     private:
 

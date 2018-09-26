@@ -273,7 +273,7 @@ namespace tree {
      * \return Reference to the children list.
      */
     template<typename TYPE, typename CONTAINER>
-    CONTAINER & TreeItem<TYPE, CONTAINER>::children() {
+    CONTAINER & TreeItem<TYPE, CONTAINER>::childrenAccess() {
         return mChildren;
     }
 
