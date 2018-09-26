@@ -161,9 +161,6 @@ namespace tree {
         void cloneContainer(const Children * container);
         void removeParent();
 
-        static const TreeItem * extractRoot(const TreeItem * item);
-        static TreeItem * extractRoot(TreeItem * item);
-
     };
 
     /********************************************************************************************************/

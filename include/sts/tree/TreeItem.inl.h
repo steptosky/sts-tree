@@ -130,7 +130,13 @@ namespace tree {
      */
     template<typename TYPE, typename CONTAINER>
     TYPE * TreeItem<TYPE, CONTAINER>::root() {
-        return static_cast<TYPE *>(TreeItem<TYPE, CONTAINER>::extractRoot(this));
+        auto currItem = static_cast<TYPE*>(this);
+        do {
+            if (currItem->isRoot()) {
+                return currItem;
+            }
+            currItem = currItem->parent();
+        } while (true);
     }
 
     /*!
@@ -139,33 +145,13 @@ namespace tree {
      */
     template<typename TYPE, typename CONTAINER>
     const TYPE * TreeItem<TYPE, CONTAINER>::root() const {
-        return static_cast<const TYPE *>(TreeItem<TYPE, CONTAINER>::extractRoot(this));
-    }
-
-    /*!
-     * \details Gets constant root.
-     * \param [in] item Tree item whose root must be found.
-     * \return Constant pointer to the root.
-     */
-    template<typename TYPE, typename CONTAINER>
-    const TreeItem<TYPE, CONTAINER> * TreeItem<TYPE, CONTAINER>::extractRoot(const TreeItem<TYPE, CONTAINER> * item) {
-        if (item->isRoot()) {
-            return item;
-        }
-        return TreeItem<TYPE, CONTAINER>::extractRoot(item->parent());
-    }
-
-    /*!
-     * \details Gets root.
-     * \param [in] item Tree item whose root must be found.
-     * \return Pointer to the root.
-     */
-    template<typename TYPE, typename CONTAINER>
-    TreeItem<TYPE, CONTAINER> * TreeItem<TYPE, CONTAINER>::extractRoot(TreeItem<TYPE, CONTAINER> * item) {
-        if (item->isRoot()) {
-            return item;
-        }
-        return TreeItem<TYPE, CONTAINER>::extractRoot(item->parent());
+        auto currItem = static_cast<TYPE*>(this);
+        do {
+            if (currItem->isRoot()) {
+                return currItem;
+            }
+            currItem = currItem->parent();
+        } while (true);
     }
 
     /**************************************************************************************************/
